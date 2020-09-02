@@ -1,0 +1,98 @@
+document.getElementById('search').addEventListener('search', search)
+
+const showPoster = document.getElementById('showMovie')
+
+function showMoviePoster(item, id) {
+
+    const div = document.createElement('div')
+    div.classList.add("main-div")
+    div.style.width = '200px'
+    div.style.margin = '0 5px 30px 0'
+    div.style.textAlign = 'center'
+
+    const pTitle = document.createElement('p')
+    pTitle.innerHTML = item.original_title
+    pTitle.style.color = 'white'
+    pTitle.style.fontSize = '20px'
+
+    const img = document.createElement('img')
+    img.classList.add("posters")
+    img.setAttribute('src', id)
+    console.log(img)
+
+    const pPopularity = document.createElement('p')
+    pPopularity.style.color = 'white'
+    pPopularity.innerHTML = 'Popularity: ' + item.popularity
+
+    const pVoteAverage = document.createElement('p')
+    pVoteAverage.style.color = 'white'
+    pVoteAverage.innerHTML = 'Average Vote: ' + item.vote_average
+
+    const preleaseDate = document.createElement('p')
+    preleaseDate.style.color = 'white'
+    preleaseDate.innerHTML = 'Release date: ' + item.release_date
+
+
+    div.appendChild(pTitle)
+    div.appendChild(img)
+    div.appendChild(pPopularity)
+    div.appendChild(pVoteAverage)
+    div.appendChild(preleaseDate)
+
+
+    showPoster.appendChild(div)
+}
+
+
+function search(e) {
+
+    document.getElementById('showMovie').innerHTML = ''
+
+    console.log('vrednost', e.target.value)
+
+    const xhr = new XMLHttpRequest()
+
+    // posto salje request kao prazan string, tako da sve dok nije prazan string nego uneto nesto u input, salji request
+    if (e.target.value != '') {
+
+        const url = `https://api.themoviedb.org/3/search/movie?api_key=ae8787612ad3a8ef6c053b139566bad9&query='${e.target.value}'`
+
+        xhr.onload = function() {
+
+            if (this.status === 200) {
+
+                console.log(JSON.parse(xhr.responseText))
+
+                const respons = JSON.parse(xhr.responseText)
+
+                console.log('response result', respons.results)
+
+                // sortiranje arraya po ocenama, sort direktno utice na array, tako da ce ispod u forEach-u biti izmenje array sa ocenama od najveceg ka najnizoj 
+                respons.results.sort(function(a, b) {
+                    return b.vote_average - a.vote_average
+                })
+
+                // prolazim kroz niz koji se vratio sa servera
+                respons.results.forEach(function(item) {
+
+
+
+                    if (item.poster_path != null) {
+
+                        showMoviePoster(item, `http://image.tmdb.org/t/p/w300${item.poster_path}`)
+
+                    } else {
+
+                        showMoviePoster(item, 'img/no-image.jpeg')
+                    }
+
+                })
+            }
+        }
+
+        xhr.open('GET', url, true)
+
+        xhr.send()
+    }
+
+}

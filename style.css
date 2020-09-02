@@ -1,0 +1,67 @@
+body {
+    background-color: black;
+}
+
+#container {
+    width: 1000px;
+    margin: auto;
+}
+
+h1 {
+    color: white;
+    font-size: 54px;
+}
+
+#search {
+    width: 400px;
+    padding: 10px 0;
+    font-size: 20px;
+}
+
+#info {
+    margin: 50px 0 50px 300px;
+}
+
+#showMovie {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.styleMovie {
+    border: 1px solid black;
+    width: 100px;
+    height: 200px;
+}
+
+.posters {
+    width: 200px;
+}
+
+h1+p {
+    color: white;
+    font-size: 20px;
+}
+
+.main-div {
+    animation-name: moveLeft;
+    animation-duration: 2s;
+}
+
+.main-div:hover {
+    transform: scale(1.2);
+}
+
+@keyframes moveLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    70% {
+        transform: translateX(60px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
